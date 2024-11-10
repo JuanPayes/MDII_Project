@@ -17,19 +17,38 @@ int cantidad = 0;
 
 double calcularProbabilidad(int num_intentos, double proba_base, int cantidad_items, int total_items)
 {
-    double proba_no_obtener = 1.0;                                                        // Probabilidad de no obtener el item en ningun intento
-    double proba_obtener = (proba_base / 100.0) * (cantidad_items / double(total_items)); // Ajustamos por la cantidad de items
+    double proba_no_obtener = 1.0; // Probabilidad de no obtener el item en ningun intento
+    double proba_obtener = (proba_base / 100.0) * (cantidad_items / double(total_items)); // Ajuste inicial por la cantidad de items
 
-    for (int i = 1; i <= num_intentos; ++i)
+    // Si la probabilidad base es 0.6 (correspondiente a los items de 3 estrellas)
+    if (proba_base == 0.6)
     {
-        // Aumentar la probabilidad a partir del tiro 7
-        if (i >= 7 && proba_base == 0.6)
+        for (int i = 1; i <= num_intentos; ++i)
         {
-            proba_obtener += 2.6 / 100.0; // Aumentar al 3.2% total
-        }
+            // A partir del intento 10, vamos incrementando la probabilidad
+            if (i >= 10)
+            {
+                // Aumento progresivo de 0.2% por intento hasta un máximo de 3.2%
+                double incremento = (i - 9) * 0.2 / 100.0; // Incrementa 0.2% por intento
+                if (proba_obtener + incremento > 0.032) // Limitar el incremento máximo al 3.2% total
+                {
+                    incremento = 0.032 - proba_obtener; // No permitir que se pase del 3.2%
+                }
+                proba_obtener += incremento;
+            }
 
-        // Calculamos la probabilidad de no obtener el item
-        proba_no_obtener *= (1.0 - proba_obtener);
+            // Calculamos la probabilidad de no obtener el item
+            proba_no_obtener *= (1.0 - proba_obtener);
+        }
+    }
+    else
+    {
+        // Si la probabilidad base no es 0.6, no hacemos el incremento
+        for (int i = 1; i <= num_intentos; ++i)
+        {
+            // Calculamos la probabilidad de no obtener el item
+            proba_no_obtener *= (1.0 - proba_obtener);
+        }
     }
 
     // Probabilidad de obtener el item al menos una vez
@@ -423,7 +442,7 @@ int main()
                     }
                     else if (estrellas == 2)
                     {
-                        proba_base = 5.0;
+                        proba_base = 5.1;
                     }
                     else if (estrellas == 3)
                     {
