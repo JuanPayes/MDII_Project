@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <limits> // Para manejar errores de entrada
+#include <cstdlib> // Para rand() y srand()
+#include <ctime>   // Para time()
 
 using namespace std;
 
@@ -190,6 +192,31 @@ void verItems()
     }
 }
 
+// Función para tirar un objeto al azar
+void tirarObjeto()
+{
+    if (cantidad == 0)
+    {
+        cout << "No hay objetos disponibles para obtener.\n";
+        return;
+    }
+
+    srand(time(0)); // Inicializa la semilla para la generación de números aleatorios
+    int indice = rand() % cantidad; // Selecciona un índice al azar
+    Item objetoTirado = items[indice]; // Obtiene el objeto
+
+    // Muestra el objeto tirado
+    cout << "Has obtenido: " << objetoTirado.nombre << " (" << obtenerEstrellas(objetoTirado.estrellas) << ")\n";
+
+    // Elimina el objeto de la lista
+    for (int i = indice; i < cantidad - 1; i++)
+    {
+        items[i] = items[i + 1]; // Desplaza los elementos hacia la izquierda
+    }
+    cantidad--; // Reduce la cantidad de objetos
+}
+
+
 int main()
 {
     int opcion;
@@ -201,7 +228,8 @@ int main()
         cout << "2. Eliminar items\n";
         cout << "3. Ver items\n";
         cout << "4. Calcular probabilidad de obtener un item en base a una cantidad de tiros\n";
-        cout << "5. Salir\n";
+        cout << "5. Tiro aleatorio\n";
+        cout << "6. Salir\n";
         cout << "Seleccione una opción: ";
 
         try
@@ -459,12 +487,15 @@ int main()
         }
         break;
         case 5:
+            tirarObjeto();
+            break;
+        case 6:
             cout << "Saliendo del programa.\n";
             break;
         default:
             cout << "Opción no válida. Seleccione una opción entre 1 y 4.\n";
         }
-    } while (opcion != 5);
+    } while (opcion != 6);
 
     return 0;
 }
