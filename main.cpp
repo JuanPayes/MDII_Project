@@ -201,19 +201,49 @@ void tirarObjeto()
         return;
     }
 
-    srand(time(0)); // Inicializa la semilla para la generación de números aleatorios
-    int indice = rand() % cantidad; // Selecciona un índice al azar
-    Item objetoTirado = items[indice]; // Obtiene el objeto
-
-    // Muestra el objeto tirado
-    cout << "Has obtenido: " << objetoTirado.nombre << " (" << obtenerEstrellas(objetoTirado.estrellas) << ")\n";
-
-    // Elimina el objeto de la lista
-    for (int i = indice; i < cantidad - 1; i++)
+    // Calcular el total de probabilidades
+    double totalProbabilidad = 0.0;
+    for (int i = 0; i < cantidad; i++)
     {
-        items[i] = items[i + 1]; // Desplaza los elementos hacia la izquierda
+        if (items[i].estrellas == 1)
+            totalProbabilidad += 94.4; // Probabilidad base para 1 estrella
+        else if (items[i].estrellas == 2)
+            totalProbabilidad += 5.1; // Probabilidad base para 2 estrellas
+        else if (items[i].estrellas == 3)
+            totalProbabilidad += 0.6; // Probabilidad base para 3 estrellas
     }
-    cantidad--; // Reduce la cantidad de objetos
+
+    // Generar un número aleatorio entre 0 y totalProbabilidad
+    double randomValue = (rand() % 10000) / 100.0; // Escala de 0 a 100.0
+    double acumulador = 0.0;
+
+    // Determinar qué objeto se obtiene basado en la probabilidad
+    for (int i = 0; i < cantidad; i++)
+    {
+        double probabilidadItem = 0.0;
+        if (items[i].estrellas == 1)
+            probabilidadItem = 94.4; // Probabilidad base para 1 estrella
+        else if (items[i].estrellas == 2)
+            probabilidadItem = 5.1; // Probabilidad base para 2 estrellas
+        else if (items[i].estrellas == 3)
+            probabilidadItem = 0.6; // Probabilidad base para 3 estrellas
+
+        acumulador += probabilidadItem;
+
+        if (randomValue <= acumulador)
+        {
+            // Muestra el objeto tirado
+            cout << "Has obtenido: " << items[i].nombre << " (" << obtenerEstrellas(items[i].estrellas) << ")\n";
+
+            // Elimina el objeto de la lista
+            for (int j = i; j < cantidad - 1; j++)
+            {
+                items[j] = items[j + 1]; // Desplaza los elementos hacia la izquierda
+            }
+            cantidad--; // Reduce la cantidad de objetos
+            return; // Salir de la función después de obtener el objeto
+        }
+    }
 }
 
 
