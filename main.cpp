@@ -77,7 +77,7 @@ void eliminarItems(const string& nombre, int n) {
             }
             cantidad--;
             eliminados++;
-            i--;  // Retroceder el índice para verificar el nuevo item en la posición actual
+            i--;
         }
     }
     cout << "Se han eliminado " << eliminados << " items con el nombre '" << nombre << "'.\n";
@@ -123,7 +123,7 @@ int main() {
                 string nombre;
 
                 try {
-                    cout << "Ingrese la cantidad de items a agregar: ";
+                    cout << "Ingrese la cantidad de items a agregar la cantidad maxima es 50: ";
                     cin >> n;
                     if (cin.fail() || n <= 0) throw runtime_error("Cantidad no válida. Se esperaba un número positivo.");
                 } catch (const exception& e) {
