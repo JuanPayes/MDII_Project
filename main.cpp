@@ -191,6 +191,10 @@ int main() {
                 break;
             }
             case 2: {
+                if (cantidad == 0) {
+                cout << "No hay items en el inventario para eliminar.\n";
+                break;
+                }
                 string nombre;
                 int n, rareza = -1;
 
