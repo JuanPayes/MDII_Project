@@ -99,7 +99,7 @@ void eliminarItems(const string& nombre, int n, int rareza) {
             }
             cantidad--;
             eliminados++;
-            i--;
+            i--; // Decrementar i para revisar el nuevo item en la posición actual
         }
     }
     cout << "Se han eliminado " << eliminados << " items con el nombre '" << nombre << "' y rareza " << obtenerRareza(rareza) << ".\n";
@@ -141,6 +141,10 @@ int main() {
 
         switch (opcion) {
             case 1: {
+                 if (cantidad >= MAX_ITEMS) {
+                    cout << "El inventario está lleno. No se pueden agregar más items.\n";
+                    break;
+                }
                 int n, rareza;
                 string nombre;
 
@@ -191,9 +195,9 @@ int main() {
                 int n, rareza = -1;
 
                 // Validación inmediata del nombre del item a eliminar
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Limpiar el buffer solo una vez al inicio
                 while (true) {
                     cout << "Ingrese el nombre del item a eliminar: ";
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     getline(cin, nombre);
                     int disponibles = contarItems(nombre);
                     if (disponibles == 0) {
@@ -219,6 +223,14 @@ int main() {
                             cin.clear();
                             cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         } else {
+                            break;
+                        }
+                    }
+                } else {
+                    // Si no hay rarezas diferentes, tomar la primera rareza encontrada
+                    for (int i = 0; i < cantidad; i++) {
+                        if (items[i].nombre == nombre) {
+                            rareza = items[i].rareza;
                             break;
                         }
                     }
