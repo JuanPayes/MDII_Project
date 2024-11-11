@@ -52,7 +52,6 @@ double calcularProbabilidad(int num_intentos, double proba_base, int cantidad_it
             proba_no_obtener *= (1.0 - proba_obtener);
         }
     }
-
     // Probabilidad de obtener el item al menos una vez
     return 1.0 - proba_no_obtener;
 }
@@ -184,10 +183,50 @@ void verItems()
     else
     {
         cout << "Items en el inventario:\n";
+        
+        // Arreglos para guardar los items ya contados
+        Item itemsContados[MAX_ITEMS];
+        int cantidadContados = 0;
+
         for (int i = 0; i < cantidad; i++)
         {
-            cout << "Nombre: " << items[i].nombre
-                 << ", Estrellas: " << obtenerEstrellas(items[i].estrellas) << endl;
+            bool yaContado = false;
+
+            // Revisamos si el item ya ha sido contado
+            for (int j = 0; j < cantidadContados; j++)
+            {
+                if (items[i].nombre == itemsContados[j].nombre &&
+                    items[i].estrellas == itemsContados[j].estrellas)
+                {
+                    yaContado = true;
+                    break;
+                }
+            }
+
+            // Si no ha sido contado, lo contamos y lo mostramos
+            if (!yaContado)
+            {
+                int conteo = 0;
+                for (int k = 0; k < cantidad; k++)
+                {
+                    if (items[i].nombre == items[k].nombre &&
+                        items[i].estrellas == items[k].estrellas)
+                    {
+                        conteo++;
+                    }
+                }
+
+                // Agregamos el item a los items contados
+                itemsContados[cantidadContados] = items[i];
+                cantidadContados++;
+
+                // Mostramos el item y su conteo
+                cout << "------------------------------------------------------------------------\n";
+                cout << "Nombre: " << items[i].nombre
+                     << ", Estrellas: " << obtenerEstrellas(items[i].estrellas)
+                     << ", Cantidad: " << conteo << "\n";
+                cout << "------------------------------------------------------------------------\n";
+            }
         }
     }
 }
