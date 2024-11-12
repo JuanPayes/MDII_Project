@@ -17,7 +17,7 @@ struct Item
 Item items[MAX_ITEMS];
 int cantidad = 0;
 
-double calcularProbabilidad(int num_intentos, double proba_base, int cantidad_items, int total_items)
+/*double calcularProbabilidad(int num_intentos, double proba_base, int cantidad_items, int total_items)
 {
     double proba_no_obtener = 1.0; // Probabilidad de no obtener el item en ningun intento
     double proba_obtener = (proba_base / 100.0) * (cantidad_items / double(total_items)); // Ajuste inicial por la cantidad de items
@@ -54,10 +54,10 @@ double calcularProbabilidad(int num_intentos, double proba_base, int cantidad_it
     }
     // Probabilidad de obtener el item al menos una vez
     return 1.0 - proba_no_obtener;
-}
+}*/
 
 // Función para mostrar el nombre de la cantidad de estrellas basado en el número
-string obtenerEstrellas(int estrellas)
+/*string obtenerEstrellas(int estrellas)
 {
     switch (estrellas)
     {
@@ -70,31 +70,24 @@ string obtenerEstrellas(int estrellas)
     default:
         return "Desconocida";
     }
-}
+}*/
 
 // Función para agregar múltiples items con los mismos datos
-void agregarItems(int n, const string &nombre, int estrellas)
-{
-    for (int i = 0; i < n; i++)
-    {
+void agregarItems(int n, const string &nombre) {
+    for (int i = 0; i < n; i++) {
         items[cantidad].nombre = nombre;
-        items[cantidad].estrellas = estrellas;
         cantidad++;
     }
     int espaciosRestantes = MAX_ITEMS - cantidad;
     cout << "Se han agregado " << n << " items con nombre '" << nombre
-         << "' y de " << obtenerEstrellas(estrellas)
-         << ". Espacios disponibles después de agregar: " << espaciosRestantes << "\n";
+         << "'. Espacios disponibles después de agregar: " << espaciosRestantes << "\n";
 }
 
-// Función para contar items con el mismo nombre y cantidad de estrellas
-int contarItems(const string &nombre, int estrellas = -1)
-{
+// Función para contar items con el mismo nombre
+int contarItems(const string &nombre) {
     int contador = 0;
-    for (int i = 0; i < cantidad; i++)
-    {
-        if (items[i].nombre == nombre && (estrellas == -1 || items[i].estrellas == estrellas))
-        {
+    for (int i = 0; i < cantidad; i++) {
+        if (items[i].nombre == nombre) {
             contador++;
         }
     }
@@ -102,7 +95,7 @@ int contarItems(const string &nombre, int estrellas = -1)
 }
 
 // Función para verificar si existen diferentes niveles de estrellas para un mismo nombre
-bool hayEstrellasDiferentes(const string &nombre)
+/*bool hayEstrellasDiferentes(const string &nombre)
 {
     int estrellasEncontradas = -1;
     for (int i = 0; i < cantidad; i++)
@@ -121,9 +114,9 @@ bool hayEstrellasDiferentes(const string &nombre)
     }
     return false;
 }
-
+*/
 // Función para verificar si una cantidad específica de estrellas existe para un nombre dado
-bool existeEstrellasParaNombre(const string &nombre, int estrellas)
+/*bool existeEstrellasParaNombre(const string &nombre, int estrellas)
 {
     for (int i = 0; i < cantidad; i++)
     {
@@ -133,36 +126,28 @@ bool existeEstrellasParaNombre(const string &nombre, int estrellas)
         }
     }
     return false;
-}
+}*/
 
 // Función para eliminar n items por nombre y cantidad de estrellas
-void eliminarItems(const string &nombre, int n, int estrellas)
-{
-    int disponibles = contarItems(nombre, estrellas);
+void eliminarItems(const string &nombre, int n) {
+    int disponibles = contarItems(nombre);
 
-    if (disponibles == 0)
-    {
-        cout << "No se encontraron items con el nombre '" << nombre << "' y " << obtenerEstrellas(estrellas) << ".\n";
+    if (disponibles == 0) {
+        cout << "No se encontraron items con el nombre '" << nombre << "'.\n";
         return;
     }
 
-    if (n > disponibles)
-    {
-        cout << "Solo hay " << disponibles << " items disponibles con el nombre '" << nombre << "' y " << obtenerEstrellas(estrellas) << ". Eliminando todos ellos.\n";
+    if (n > disponibles) {
+        cout << "Solo hay " << disponibles << " items disponibles con el nombre '" << nombre << "'. Eliminando todos ellos.\n";
         n = disponibles;
-    }
-    else
-    {
-        cout << "Eliminando " << n << " items con el nombre '" << nombre << "' y " << obtenerEstrellas(estrellas) << ".\n";
+    } else {
+        cout << "Eliminando " << n << " items con el nombre '" << nombre << "'.\n";
     }
 
     int eliminados = 0;
-    for (int i = 0; i < cantidad && eliminados < n; i++)
-    {
-        if (items[i].nombre == nombre && items[i].estrellas == estrellas)
-        {
-            for (int j = i; j < cantidad - 1; j++)
-            {
+    for (int i = 0; i < cantidad && eliminados < n; i++) {
+        if (items[i].nombre == nombre) {
+            for (int j = i; j < cantidad - 1; j++) {
                 items[j] = items[j + 1];
             }
             cantidad--;
@@ -170,48 +155,37 @@ void eliminarItems(const string &nombre, int n, int estrellas)
             i--;
         }
     }
-    cout << "Se han eliminado " << eliminados << " items con el nombre '" << nombre << "' y " << obtenerEstrellas(estrellas) << ".\n";
+    cout << "Se han eliminado " << eliminados << " items con el nombre '" << nombre << "'.\n";
 }
 
+
 // Función para mostrar todos los items
-void verItems()
-{
-    if (cantidad == 0)
-    {
+void verItems() {
+    if (cantidad == 0) {
         cout << "No hay items en el inventario.\n";
-    }
-    else
-    {
+    } else {
         cout << "Items en el inventario:\n";
-        
+
         // Arreglos para guardar los items ya contados
         Item itemsContados[MAX_ITEMS];
         int cantidadContados = 0;
 
-        for (int i = 0; i < cantidad; i++)
-        {
+        for (int i = 0; i < cantidad; i++) {
             bool yaContado = false;
 
             // Revisamos si el item ya ha sido contado
-            for (int j = 0; j < cantidadContados; j++)
-            {
-                if (items[i].nombre == itemsContados[j].nombre &&
-                    items[i].estrellas == itemsContados[j].estrellas)
-                {
+            for (int j = 0; j < cantidadContados; j++) {
+                if (items[i].nombre == itemsContados[j].nombre) {
                     yaContado = true;
                     break;
                 }
             }
 
             // Si no ha sido contado, lo contamos y lo mostramos
-            if (!yaContado)
-            {
+            if (!yaContado) {
                 int conteo = 0;
-                for (int k = 0; k < cantidad; k++)
-                {
-                    if (items[i].nombre == items[k].nombre &&
-                        items[i].estrellas == items[k].estrellas)
-                    {
+                for (int k = 0; k < cantidad; k++) {
+                    if (items[i].nombre == items[k].nombre) {
                         conteo++;
                     }
                 }
@@ -223,7 +197,6 @@ void verItems()
                 // Mostramos el item y su conteo
                 cout << "------------------------------------------------------------------------\n";
                 cout << "Nombre: " << items[i].nombre
-                     << ", Estrellas: " << obtenerEstrellas(items[i].estrellas)
                      << ", Cantidad: " << conteo << "\n";
                 cout << "------------------------------------------------------------------------\n";
             }
@@ -232,7 +205,7 @@ void verItems()
 }
 
 // Función para tirar un objeto al azar
-void tirarObjeto()
+/*void tirarObjeto()
 {
     if (cantidad == 0)
     {
@@ -284,9 +257,8 @@ void tirarObjeto()
         }
     }
 }
-
-
-int main()
+*/
+    int main()
 {
     int opcion;
 
@@ -314,6 +286,7 @@ int main()
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             continue;
         }
+
         switch (opcion)
         {
         case 1:
@@ -323,7 +296,7 @@ int main()
                 cout << "El inventario está lleno. No se pueden agregar más items.\n";
                 break;
             }
-            int n, estrellas;
+            int n;
             string nombre;
 
             int espaciosDisponibles = MAX_ITEMS - cantidad;
@@ -349,27 +322,7 @@ int main()
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, nombre);
 
-            while (true)
-            {
-                cout << "Seleccione la cantidad de estrellas del item:\n";
-                cout << "1. 1 estrella\n";
-                cout << "2. 2 estrellas\n";
-                cout << "3. 3 estrellas\n";
-                cout << "Opción: ";
-                cin >> estrellas;
-                if (cin.fail() || estrellas < 1 || estrellas > 3)
-                {
-                    cout << "Opción no válida. Seleccione un número entre 1 y 3.\n";
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            agregarItems(n, nombre, estrellas);
+            agregarItems(n, nombre);
             break;
         }
         case 2:
@@ -380,7 +333,7 @@ int main()
                 break;
             }
             string nombre;
-            int n, estrellas = -1;
+            int n;
 
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             while (true)
@@ -398,46 +351,11 @@ int main()
                     break;
                 }
             }
-
-            if (hayEstrellasDiferentes(nombre))
-            {
-                cout << "Se encontraron items con diferentes cantidades de estrellas. Seleccione las estrellas del item que desea eliminar:\n";
-                while (true)
-                {
-                    cout << "1. 1 estrella\n";
-                    cout << "2. 2 estrellas\n";
-                    cout << "3. 3 estrellas\n";
-                    cout << "Opción: ";
-                    cin >> estrellas;
-                    if (cin.fail() || estrellas < 1 || estrellas > 3 || !existeEstrellasParaNombre(nombre, estrellas))
-                    {
-                        cout << "Opción no válida o inexistente para este item. Seleccione una cantidad válida de estrellas.\n";
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < cantidad; i++)
-                {
-                    if (items[i].nombre == nombre)
-                    {
-                        estrellas = items[i].estrellas;
-                        break;
-                    }
-                }
-            }
-
             while (true)
             {
                 cout << "Ingrese la cantidad de items a eliminar: ";
                 cin >> n;
-                int disponibles = contarItems(nombre, estrellas);
+                int disponibles = contarItems(nombre);
                 if (cin.fail() || n <= 0)
                 {
                     cout << "Cantidad no válida. Se esperaba un número positivo.\n";
@@ -450,7 +368,7 @@ int main()
                 }
                 else
                 {
-                    eliminarItems(nombre, n, estrellas);
+                    eliminarItems(nombre, n);
                     break;
                 }
             }
@@ -463,6 +381,7 @@ int main()
         }
         case 4:
         {
+            /*
             string nombre;
             int n, estrellas = -1;
             int disponibles = 0;
@@ -552,19 +471,22 @@ int main()
                     break; // Sale del while cuando se calcula la probabilidad
                 }
             }
+            */
             break; // Sale del case 4 cuando termina el proceso
         }
-        break;
         case 5:
+            /*
             tirarObjeto();
+            */
             break;
         case 6:
             cout << "Saliendo del programa.\n";
             break;
         default:
-            cout << "Opción no válida. Seleccione una opción entre 1 y 4.\n";
+            cout << "Opción no válida. Seleccione una opción entre 1 y 6.\n";
         }
     } while (opcion != 6);
 
     return 0;
 }
+
