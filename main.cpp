@@ -152,59 +152,61 @@ void verItems()
 }
 
 // Función para tirar un objeto al azar
-/*void tirarObjeto()
+void tirarObjeto()
 {
     if (cantidad == 0)
     {
         cout << "No hay objetos disponibles para obtener.\n";
         return;
-    }
-
-    // Calcular el total de probabilidades
-    double totalProbabilidad = 0.0;
-    for (int i = 0; i < cantidad; i++)
+    } else
     {
-        if (items[i].estrellas == 1)
-            totalProbabilidad += 94.4; // Probabilidad base para 1 estrella
-        else if (items[i].estrellas == 2)
-            totalProbabilidad += 5.1; // Probabilidad base para 2 estrellas
-        else if (items[i].estrellas == 3)
-            totalProbabilidad += 0.6; // Probabilidad base para 3 estrellas
-    }
-
-    // Generar un número aleatorio entre 0 y totalProbabilidad
-    double randomValue = (rand() % 10000) / 100.0; // Escala de 0 a 100.0
-    double acumulador = 0.0;
-
-    // Determinar qué objeto se obtiene basado en la probabilidad
-    for (int i = 0; i < cantidad; i++)
+    int opcion;
+    cout << "Seleccione una opción:\n";
+    cout << "1. Hacer un tiro individual\n";
+    cout << "2. Hacer 10 tiros de una sola vez\n";
+    cout << "Ingrese su opción: ";
+    cin >> opcion;
+    if (opcion == 1)
     {
-        double probabilidadItem = 0.0;
-        if (items[i].estrellas == 1)
-            probabilidadItem = 94.4; // Probabilidad base para 1 estrella
-        else if (items[i].estrellas == 2)
-            probabilidadItem = 5.1; // Probabilidad base para 2 estrellas
-        else if (items[i].estrellas == 3)
-            probabilidadItem = 0.6; // Probabilidad base para 3 estrellas
-
-        acumulador += probabilidadItem;
-
-        if (randomValue <= acumulador)
+        // Hacer un tiro individual
+        int randomIndex = rand() % cantidad; // Selecciona un índice aleatorio
+        cout << "Has obtenido: " << items[randomIndex].nombre << "\n";
+        // Elimina el objeto de la lista
+        for (int j = randomIndex; j < cantidad - 1; j++)
         {
-            // Muestra el objeto tirado
-            cout << "Has obtenido: " << items[i].nombre << " (" << obtenerEstrellas(items[i].estrellas) << ")\n";
-
-            // Elimina el objeto de la lista
-            for (int j = i; j < cantidad - 1; j++)
+            items[j] = items[j + 1]; // Desplaza los elementos hacia la izquierda
+        }
+        cantidad--; // Reduce la cantidad de objetos
+    }
+    else if (opcion == 2)
+    {
+        if (cantidad >= 10)
+        {
+                // Hacer 10 tiros de una sola vez
+            cout << "Objetos obtenidos:\n";
+            for (int i = 0; i < 10 && cantidad > 0; i++)
             {
-                items[j] = items[j + 1]; // Desplaza los elementos hacia la izquierda
+                int randomIndex = rand() % cantidad; // Selecciona un índice aleatorio
+                cout << items[randomIndex].nombre << "\n";
+                // Elimina el objeto de la lista
+                for (int j = randomIndex; j < cantidad - 1; j++)
+                {
+                    items[j] = items[j + 1]; // Desplaza los elementos hacia la izquierda
+                }
+                cantidad--; // Reduce la cantidad de objetos
             }
-            cantidad--; // Reduce la cantidad de objetos
-            return; // Salir de la función después de obtener el objeto
+        } else
+        {
+            cout << "No hay suficientes objetos para realizar 10 tiros.\n";
         }
     }
+    else
+    {
+        cout << "Opción no válida. Por favor, seleccione 1 o 2.\n";
+    }
+    }
 }
-*/
+
 int main()
 {
     int opcion;
@@ -370,9 +372,7 @@ int main()
             break;
         }
         case 5:
-            /*
             tirarObjeto();
-            */
             break;
         case 6:
             cout << "Saliendo del programa.\n";
