@@ -169,11 +169,13 @@ void tirarObjeto()
         cout << "2. Hacer 10 tiros de una sola vez\n";
         cout << "Ingrese su opcion: ";
         cin >> opcion;
+
         if (opcion == 1)
         {
             // Hacer un tiro individual
             int randomIndex = rand() % cantidad; // Selecciona un índice aleatorio
             cout << "Has obtenido: " << items[randomIndex].nombre << "\n";
+
             // Elimina el objeto de la lista
             for (int j = randomIndex; j < cantidad - 1; j++)
             {
@@ -187,10 +189,12 @@ void tirarObjeto()
             {
                 // Hacer 10 tiros de una sola vez
                 cout << "Objetos obtenidos:\n";
-                for (int i = 0; i < 10 && cantidad > 0; i++)
+                for (int i = 0; i < 10; i++)
                 {
+                    if (cantidad <= 0) break; // Verifica si ya no hay objetos
                     int randomIndex = rand() % cantidad; // Selecciona un índice aleatorio
-                    cout << items[randomIndex].nombre << "\n";
+                    cout << "**************************************************\n";
+                    cout << "Tiro " << (i + 1) << ": " << items[randomIndex].nombre << "\n";
                     // Elimina el objeto de la lista
                     for (int j = randomIndex; j < cantidad - 1; j++)
                     {
