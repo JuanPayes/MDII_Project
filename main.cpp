@@ -17,18 +17,20 @@ struct Item
 Item items[MAX_ITEMS];
 int cantidad = 0;
 
-double calcularProbabilidad(int num_intentos, int cantidad_items, int total_items)
+double calcularProbabilidad(int Ng, int Nmax, int k)
 {
-    double proba_no_obtener = 1.0;                               // Probabilidad de no obtener el item en ningún intento
-    double proba_obtener = cantidad_items / double(total_items); // Probabilidad de obtener el item en un intento
+    double probabilidadNoExito = 1.0;
 
-    for (int i = 1; i <= num_intentos; ++i)
+    for (int i = 0; i < k; i++)
     {
-        // Calculamos la probabilidad de no obtener el item en el intento actual
-        proba_no_obtener *= (1.0 - proba_obtener);
+        if (Nmax - i <= 0 || Ng - i <= 0)
+            break;
+
+        double probabilidadIntento = 1 - (static_cast<double>(Ng - i) / (Nmax - i));
+        probabilidadNoExito *= probabilidadIntento;
     }
-    // Probabilidad de obtener el item al menos una vez en los intentos dados
-    return 1.0 - proba_no_obtener;
+
+    return 1.0 - probabilidadNoExito;
 }
 
 // Función para agregar múltiples items con los mismos datos
@@ -41,7 +43,7 @@ void agregarItems(int n, const string &nombre)
     }
     int espaciosRestantes = MAX_ITEMS - cantidad;
     cout << "Se han agregado " << n << " items con nombre '" << nombre
-         << "'. Espacios disponibles después de agregar: " << espaciosRestantes << "\n";
+         << "'. Espacios disponibles despues de agregar: " << espaciosRestantes << "\n";
 }
 
 // Función para contar items con el mismo nombre
@@ -158,52 +160,54 @@ void tirarObjeto()
     {
         cout << "No hay objetos disponibles para obtener.\n";
         return;
-    } else
-    {
-    int opcion;
-    cout << "Seleccione una opción:\n";
-    cout << "1. Hacer un tiro individual\n";
-    cout << "2. Hacer 10 tiros de una sola vez\n";
-    cout << "Ingrese su opción: ";
-    cin >> opcion;
-    if (opcion == 1)
-    {
-        // Hacer un tiro individual
-        int randomIndex = rand() % cantidad; // Selecciona un índice aleatorio
-        cout << "Has obtenido: " << items[randomIndex].nombre << "\n";
-        // Elimina el objeto de la lista
-        for (int j = randomIndex; j < cantidad - 1; j++)
-        {
-            items[j] = items[j + 1]; // Desplaza los elementos hacia la izquierda
-        }
-        cantidad--; // Reduce la cantidad de objetos
-    }
-    else if (opcion == 2)
-    {
-        if (cantidad >= 10)
-        {
-                // Hacer 10 tiros de una sola vez
-            cout << "Objetos obtenidos:\n";
-            for (int i = 0; i < 10 && cantidad > 0; i++)
-            {
-                int randomIndex = rand() % cantidad; // Selecciona un índice aleatorio
-                cout << items[randomIndex].nombre << "\n";
-                // Elimina el objeto de la lista
-                for (int j = randomIndex; j < cantidad - 1; j++)
-                {
-                    items[j] = items[j + 1]; // Desplaza los elementos hacia la izquierda
-                }
-                cantidad--; // Reduce la cantidad de objetos
-            }
-        } else
-        {
-            cout << "No hay suficientes objetos para realizar 10 tiros.\n";
-        }
     }
     else
     {
-        cout << "Opción no válida. Por favor, seleccione 1 o 2.\n";
-    }
+        int opcion;
+        cout << "Seleccione una opcion:\n";
+        cout << "1. Hacer un tiro individual\n";
+        cout << "2. Hacer 10 tiros de una sola vez\n";
+        cout << "Ingrese su opcion: ";
+        cin >> opcion;
+        if (opcion == 1)
+        {
+            // Hacer un tiro individual
+            int randomIndex = rand() % cantidad; // Selecciona un índice aleatorio
+            cout << "Has obtenido: " << items[randomIndex].nombre << "\n";
+            // Elimina el objeto de la lista
+            for (int j = randomIndex; j < cantidad - 1; j++)
+            {
+                items[j] = items[j + 1]; // Desplaza los elementos hacia la izquierda
+            }
+            cantidad--; // Reduce la cantidad de objetos
+        }
+        else if (opcion == 2)
+        {
+            if (cantidad >= 10)
+            {
+                // Hacer 10 tiros de una sola vez
+                cout << "Objetos obtenidos:\n";
+                for (int i = 0; i < 10 && cantidad > 0; i++)
+                {
+                    int randomIndex = rand() % cantidad; // Selecciona un índice aleatorio
+                    cout << items[randomIndex].nombre << "\n";
+                    // Elimina el objeto de la lista
+                    for (int j = randomIndex; j < cantidad - 1; j++)
+                    {
+                        items[j] = items[j + 1]; // Desplaza los elementos hacia la izquierda
+                    }
+                    cantidad--; // Reduce la cantidad de objetos
+                }
+            }
+            else
+            {
+                cout << "No hay suficientes objetos para realizar 10 tiros.\n";
+            }
+        }
+        else
+        {
+            cout << "Opcion no valida. Por favor, seleccione 1 o 2.\n";
+        }
     }
 }
 
@@ -363,13 +367,13 @@ int main()
                 }
                 else
                 {
-                    double result = calcularProbabilidad(n, disponibles, cantidad);
+                    double probabilidad = calcularProbabilidad(disponibles, cantidad, n);
                     cout << "La probabilidad de obtener " << nombre << " en " << n
-                         << " intentos es: " << result * 100 << "%" << endl;
+                        << " intentos es: " << probabilidad * 100 << "%" << endl;
                     break;
                 }
             }
-            break;
+            break;  
         }
         case 5:
             tirarObjeto();
